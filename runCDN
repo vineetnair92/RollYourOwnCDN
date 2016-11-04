@@ -1,0 +1,18 @@
+#!/bin/bash
+port=$2
+origin=$4
+name=$6
+username=$8
+keyfile=${10}
+
+dnsserver=cs5700cdnproject.ccs.neu.edu
+
+
+ssh -i $keyfile -n -f $username@$dnsserver "bash -c 'cd ~/cdn; nohup ./dnsserver -p $port -n $name'"  > /dev/null 2>&1
+
+for host in ec2-52-0-73-113.compute-1.amazonaws.com ec2-52-16-219-28.eu-west-1.compute.amazonaws.com ec2-52-11-8-29.us-west-2.compute.amazonaws.com ec2-52-8-12-101.us-west-1.compute.amazonaws.com ec2-52-28-48-84.eu-central-1.compute.amazonaws.com ec2-52-68-12-77.ap-northeast-1.compute.amazonaws.com ec2-52-74-143-5.ap-southeast-1.compute.amazonaws.com ec2-52-64-63-125.ap-southeast-2.compute.amazonaws.com ec2-54-94-214-108.sa-east-1.compute.amazonaws.com
+
+do
+	ssh -i $keyfile -n -f $username@$host "bash -c 'cd ~/cdn; nohup ./httpserver -p $port -o $origin'"  > /dev/null 2>&1
+	ssh -i $keyfile -n -f $username@$host "bash -c 'cd ~/cdn; nohup python active_measurements.py $port'" > /dev/null 2>&1
+done

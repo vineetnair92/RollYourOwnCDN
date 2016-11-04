@@ -1,0 +1,16 @@
+#!/bin/bash
+
+keyfile=~/.ssh/id_rsa
+username=kish
+
+#names=ec2-54-94-214-108.sa-east-1.compute.amazonaws.com ec2-52-11-8-29.us-west-2.compute.amazonaws.com
+dns=cs5700cdnproject.ccs.neu.edu
+
+for host in ec2-54-94-214-108.sa-east-1.compute.amazonaws.com ec2-52-11-8-29.us-west-2.compute.amazonaws.com
+do
+	scp -i $keyfile httpserver_mt.py $username@$host:~/cdn/
+	scp -i $keyfile active_measurements.py $username@$host:~/cdn/
+#echo hi
+	
+done
+scp -i $keyfile dserver.py $username@$dns:~/cdn/

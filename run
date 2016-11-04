@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./runCDN -p 40012 -o ec2-52-4-98-110.compute-1.amazonaws.com -n cs5700cdn.example.com -u kish -i ~/.ssh/id_rsa

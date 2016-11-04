@@ -1,0 +1,25 @@
+Design Desicions:
+DNS Server:
+-- A multi-threaded DNS Server that serves a random replica server the first time it encounters a client and then assigns a replica
+   server once it gets results from active measurements.
+-- UDP server that translates the given host name with an IP address in the answer section. Sends a blank answer if the name requested
+   was not the given host name.
+
+HTTP Server:
+-- Cache Eviction policy was chosen as Least Frequently Used (LFU) in order to take advantage of the Zipf distribution followed by
+   web requests.
+-- A multi-threaded web server where access to the common cache is synchronized by a mutex lock, so that the service can be parallelized to
+   a certain extent.
+-- A daemon thread that periodically persists the cache to the disk to insulate the web service from synchronous writes to disk.
+
+Strategy: Active Measurements
+-- The DNS server broadcasts its client IPs to all the replica servers, each of which then use scamper pings and return the results back to
+   the DNS server.
+-- The DNS server then updates its table with ping values that are lower than the current value.
+-- Uses two additional ports on the DNS server and each of the replicas to communicate this information. The ports are selected
+   as a function of the port number to the servers. This was done to simplify the handling of communication for active measurement.
+   
+What we would do with more time:
+-- We currently do not keep track of load on each server or implement load balancing. Eg. Keep track of how many IPs have been mapped to each
+   replica server and for a new client, when two servers produce 'close' ping times, the one with the lesser load would be assigned.
+   

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+keyfile=~/.ssh/id_rsa
+username=kish
+
+host=ec2-54-94-214-108.sa-east-1.compute.amazonaws.com
+dns=cs5700cdnproject.ccs.neu.edu
+
+ssh -i $keyfile $username@$host 'killall python'
+ssh -i $keyfile $username@$dns 'killall python'

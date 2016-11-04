@@ -1,0 +1,4 @@
+python_binary=$(which python)
+python_script='httpserver_mt.py'
+
+$python_binary $python_script $1 $2 $3 $4
